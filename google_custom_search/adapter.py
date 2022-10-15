@@ -10,6 +10,8 @@ except ImportError:
 else:
     async_mode = True
 
+from .errors import AsyncError
+
 
 class BaseAdapter:
     APIURL = "https://www.googleapis.com/customsearch/v1"
