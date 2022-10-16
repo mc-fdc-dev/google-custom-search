@@ -33,5 +33,6 @@ class AiohttpAdapter(BaseAdapter):
 
     def __init__(self, *args, **kwargs):
         if not async_mode:
-            raise AsyncError("This adapter use aiohttp, so please install aiohttp")
+            raise AsyncError(
+                "This adapter use aiohttp, so please install aiohttp")
         self.session = ClientSession(*args, **kwargs)
