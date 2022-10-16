@@ -1,5 +1,5 @@
-google_custom_search.adapter module
-------------------------------------
+google_custom_search.adapter
+----------------------------
 
 .. automodule:: google_custom_search.adapter
    :members:
