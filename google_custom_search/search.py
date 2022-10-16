@@ -10,9 +10,7 @@ class CustomSearch:
     """This is the class used when using Google Custom Search.
 
     Args:
-        apikey (str): Insert google custom search api key.
-        engine_id (str): Insert google custom search engine id.
-        aiohttp_options (dict): Custom aiohttp option.
+        adapter (BaseAdapter): Insert adapter
     """
     APIURL: str = "https://www.googleapis.com/customsearch/v1"
 
