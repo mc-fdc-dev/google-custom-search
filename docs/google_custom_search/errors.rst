@@ -1,5 +1,5 @@
-google_custom_search.errors module
-------------------------------------
+google_custom_search.errors
+---------------------------
 
 .. automodule:: google_custom_search.errors
    :members:
