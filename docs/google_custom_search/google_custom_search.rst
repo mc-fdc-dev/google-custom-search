@@ -20,6 +20,14 @@ google\_custom\_search.search module
    :undoc-members:
    :show-inheritance:
 
+google\_custom\_search.adapter module
+------------------------------------
+
+.. automodule:: google_custom_search.adapter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 google\_custom\_search.types module
 -----------------------------------
 

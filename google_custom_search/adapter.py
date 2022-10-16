@@ -17,6 +17,16 @@ from .types import Item
 
 
 class BaseAdapter(metaclass=ABCMeta):
+    """This is the base class for adapters.
+
+    Args:
+        apikey (str): Insert google custom search api key.
+        engine_id (str): Insert google custom search engine id.
+    
+    Attributes:
+        APIURL (str): Google Custom Search API URL
+    """
+
     APIURL = "https://www.googleapis.com/customsearch/v1"
     session: Any = None
 
@@ -57,6 +67,7 @@ class BaseAdapter(metaclass=ABCMeta):
 
 
 class RequestsAdapter(BaseAdapter):
+    "This class is requestsadapter for sync mode."
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -76,6 +87,7 @@ class RequestsAdapter(BaseAdapter):
 
 
 class AiohttpAdapter(BaseAdapter):
+    "This class is aiohttpadapter for async mode."
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
