@@ -1,6 +1,3 @@
-import json
-
-
 class Item:
     """This is return a item."""
 
