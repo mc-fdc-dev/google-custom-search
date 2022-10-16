@@ -22,7 +22,7 @@ class BaseAdapter(metaclass=ABCMeta):
     Args:
         apikey (str): Insert google custom search api key.
         engine_id (str): Insert google custom search engine id.
-    
+
     Attributes:
         APIURL (str): Google Custom Search API URL
     """
