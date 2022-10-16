@@ -1,5 +1,5 @@
-google_custom_search.types module
------------------------------------
+google_custom_search.types
+--------------------------
 
 .. automodule:: google_custom_search.types
    :members:
