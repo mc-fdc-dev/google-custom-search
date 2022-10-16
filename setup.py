@@ -1,10 +1,13 @@
 import setuptools
 
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
-    
+
+
 def _requires_from_file(filename):
     return open(filename, encoding="utf8").read().splitlines()
+
 
 def _get_version(filename):
     with open(filename, "r") as f:
@@ -15,6 +18,7 @@ def _get_version(filename):
             version = line.split()[2]
             break
     return version.replace('"', '')
+
 
 extras_require = {
     "async": [

@@ -22,6 +22,8 @@ copyright = '2022, dms'
 author = 'dms'
 
 # The full version, including alpha/beta/rc tags
+
+
 def _get_version(filename):
     with open(filename, "r") as f:
         lines = f.readlines()
@@ -31,6 +33,8 @@ def _get_version(filename):
             version = line.split()[2]
             break
     return version.replace('"', '')
+
+
 release = _get_version("../google_custom_search/__init__.py")
 
 
