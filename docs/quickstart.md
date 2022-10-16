@@ -46,32 +46,16 @@ for result in results:
 ### async
 
 ```py
+from google_custom_search import CustomSearch, AiohttpAdapter
 import asyncio
-import google_custom_search
 
 
-google = google_custom_search.CustomSearch(token="your api_key", engine_id="your engine_id", image=True)
-# if image is True, it's can search, but you need to setting at google console search
+customsearch = CustomSearch(AiohttpAdapter("apikey", "engine"))
+
+
 async def main():
-    results = await google.search_async("word!")
-    for result in results:
-        # get a kind
-        print(result.kind)
-        
-        # get a title.
-        print(result.title)
-  
-        # get a link.
-        print(result.url)
-  
-        # get a displayLink.
-        print(result.display_url)
-        
-        # get a htmlTitle.
-        print(result.html_title)
-  
-        # get a snippet.
-        print(result.snippet)
-    
+    for item in await customsearch.search("python"):
+        print(item.title)
+
 asyncio.run(main())
 ```
