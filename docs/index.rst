@@ -12,7 +12,6 @@ This library is high level wrapper for google custom search api.
    :caption: Contents:
    
    quickstart
-   google_custom_search/index
    google_custom_search/errors
    google_custom_search/search
    google_custom_search/adapter
