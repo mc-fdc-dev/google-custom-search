@@ -12,6 +12,12 @@ This library is high level wrapper for google custom search api.
    :caption: Contents:
    
    quickstart
+ 
+ 
+.. toctree::
+   :maxdepth: 2
+   :caption: Documentation:
+
    google_custom_search/errors
    google_custom_search/search
    google_custom_search/adapter
