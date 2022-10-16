@@ -1,12 +1,12 @@
 import requests
 try:
-    import aiohttp
+    from aiohttp import ClientSession
 except ImportError:
     no_async = True
 else:
     no_async = False
 
-from typing import Optional, List, AsyncIterator
+from typing import List
 from .errors import ApiNotEnabled, AsyncError
 from .types import Item
 
@@ -17,22 +17,53 @@ class CustomSearch:
     Args:
         apikey (str): Insert google custom search api key.
         engine_id (str): Insert google custom search engine id.
+        aiohttp_options (dict): Custom aiohttp option.
     """
-    APIURL = "https://www.googleapis.com/customsearch/v1"
+    APIURL: str = "https://www.googleapis.com/customsearch/v1"
 
-    def __init__(self,
-                 apikey: str,
-                 engine_id: str,
-                 image: Optional[bool] = False):
-        self.token = apikey
+    def __init__(
+        self, apikey: str, engine_id: str,
+        aiohttp_options: dict
+    ):
+        self.apikey = apikey
         self.engine_id = engine_id
-        self.image = image
+        if not no_async:
+            self.session = ClientSession(**aiohttp_options)
+        else:
+            self.session = None
 
-    def search(self, keyword: str) -> List[Item]:
+    def _payload_maker(
+        self, q: str, *,
+        safe: bool = False,
+        filter: bool = False
+    ) -> dict:
+        """Make payload
+
+        Args:
+            q (str): Search keyword
+            safe (bool): Using safe mode
+            filter (filter): Use filter mode
+
+        Returns:
+            dict: Return payload"""
+        payload = {
+            "key": self.apikey,
+            "cx": self.engine_id,
+            "q": q
+        }
+        if safe:
+            payload["safe"] = "active"
+        if not filter:
+            payload["filter"] = 0
+        return payload
+
+    def search(self, *args, **kwargs) -> List[Item]:
         """This is searched using api.
 
         Args:
-            keyword (str): Search word
+            q (str): Search keyword
+            safe (bool): Using safe mode
+            filter (filter): Use filter mode
 
         Returns:
             List[Item]: return result
@@ -40,12 +71,8 @@ class CustomSearch:
         Raises:
             ApiNotEnabled: api is not invalid
         """
-        params = {
-            "key": self.token,
-            "cx": self.engine_id,
-            "q": keyword
-        }
-        res = requests.get(self.APIURL, params=params)
+        res = requests.get(
+            self.APIURL, params=self._payload_maker(*args, **kwargs))
         return self._from_dict(res.json())
 
     def _from_dict(self, data: dict) -> List[Item]:
@@ -56,28 +83,13 @@ class CustomSearch:
         else:
             return [Item(i) for i in data["items"]]
 
-    async def search_async_iterator(self, *args, **kwargs) -> AsyncIterator[Item]:
-        """It's like search_async, but this is iterator
-
-        Args:
-            keyword  (str): Search Word
-
-        Yields:
-            Item: Return result
-
-        Note:
-            You need aiohttp library.
-        """
-        for item in (await self.search_async(*args, **kwargs)):
-            yield item
-
-    async def search_async(self, q: str, *, safe: bool = False,
-                           filter: bool = True) -> List[Item]:
+    async def search_async(self, *args, **kwargs) -> List[Item]:
         """This is an asynchronous version of custom_search.search.
 
         Args:
-            q (str): Search word
-            safe (bool): Safe search mode
+            q (str): Search keyword
+            safe (bool): Using safe mode
+            filter (filter): Use filter mode
 
         Returns:
             List[Item]: return result
@@ -87,20 +99,10 @@ class CustomSearch:
             AsyncError: If you don't install aiohttp, lib call error.
 
         Note:
-            You need aiohttp library.
+            This function use aiohttp, so please install aiohttp.
         """
         if no_async:
             raise AsyncError(
-                "This library can't use aiohttp. Please install aiohttp")
-        payload = {
-            "key": self.token,
-            "cx": self.engine_id,
-            "q": q
-        }
-        if safe:
-            payload["safe"] = "active"
-        if not filter:
-            payload["filter"] = 0
-        async with aiohttp.ClientSession() as session:
-            async with session.get(self.APIURL, params=payload) as res:
-                return self._from_dict(await res.json())
+                "This function use aiohttp, so please install aiohttp.")
+        async with self.session.get(self.APIURL, params=self._payload_maker(*args, **kwargs)) as res:
+            return self._from_dict(await res.json())

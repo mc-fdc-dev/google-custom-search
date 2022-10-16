@@ -5,7 +5,7 @@ Submodules
 ----------
 
 google_custom_search.search module
---------------------
+----------------------------------
 
 .. automodule:: google_custom_search.search
    :members:
@@ -13,7 +13,7 @@ google_custom_search.search module
    :show-inheritance:
 
 google_custom_search.types module
---------------------
+---------------------------------
 
 .. automodule:: google_custom_search.types
    :members:
@@ -21,7 +21,7 @@ google_custom_search.types module
    :show-inheritance:
    
 google_custom_search.errors module
---------------------
+----------------------------------
 
 .. automodule:: google_custom_search.errors
    :members:

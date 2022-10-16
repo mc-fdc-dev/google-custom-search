@@ -1,6 +1,6 @@
 # Quick start
 
-## install
+## Installation
 
 ```bash
 pip install google-custom-search
@@ -12,7 +12,7 @@ or if you use async version, please run this.
 pip install google-custom-search[async]
 ```
 
-## sample
+## Example
 
 ### sync
 

@@ -5,7 +5,7 @@
 
 Welcome to google-custom-search's documentation!
 ================================================
-This is api library.
+This library is high level wrapper for google custom search api.
 
 .. toctree::
    :maxdepth: 2

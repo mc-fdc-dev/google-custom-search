@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'google-custom-search'
-copyright = '2022, dms'
-author = 'dms'
+copyright = '2022, mc-fdc-dev'
+author = 'mc-fdc-dev'
 
 # The full version, including alpha/beta/rc tags
 
