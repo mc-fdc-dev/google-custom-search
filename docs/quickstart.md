@@ -22,6 +22,7 @@ from google_custom_search import CustomSearch, RequestsAdapter
 
 customsearch = CustomSearch(RequestsAdapter("apikey", "engine_id"))
 for item in customsearch.search("python"):
+    print(item.url)
     print(item.title)
 ```
 
@@ -37,6 +38,7 @@ customsearch = CustomSearch(AiohttpAdapter("apikey", "engine"))
 
 async def main():
     for item in await customsearch.search("python"):
+        print(item.url)
         print(item.title)
 
 asyncio.run(main())
