@@ -4,5 +4,5 @@ from .errors import *
 from .adapter import *
 
 
-__version__ = "3.0.0a"
+__version__ = "3.0.0rc"
 __author__ = "mc-fdc-dev"
