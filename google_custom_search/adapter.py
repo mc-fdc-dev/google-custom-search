@@ -71,10 +71,10 @@ class RequestsAdapter(BaseAdapter):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.session = Session()
+        self.__session = Session()
 
     def request(self, method: str, path: str, *args, **kwargs) -> dict:
-        return self.session.request(
+        return self.__session.request(
             method, self.APIURL + path, *args, **kwargs
         ).json()
 
@@ -94,10 +94,10 @@ class AiohttpAdapter(BaseAdapter):
         if not async_mode:
             raise AsyncError(
                 "This adapter use aiohttp, so please install aiohttp")
-        self.session = ClientSession(*args, **kwargs)
+        self.__session = ClientSession(*args, **kwargs)
 
     async def request(self, method: str, path: str, *args, **kwargs) -> dict:
-        async with self.session.request(
+        async with self.__session.request(
             method, self.APIURL + path, *args, **kwargs
         ) as r:
             return await r.json()
