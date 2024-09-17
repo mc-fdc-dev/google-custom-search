@@ -15,6 +15,8 @@ else:
 from .errors import AsyncError, ApiNotEnabled
 from .types import Item
 
+from typing import AsyncGenerator
+
 
 class BaseAdapter(metaclass=ABCMeta):
     """This is the base class for adapters.
@@ -41,6 +43,9 @@ class BaseAdapter(metaclass=ABCMeta):
     @abstractmethod
     def search(self, *args, **kwargs) -> List[Item]:
         ...
+
+    async def asearch(self, *_args, **_kwargs) -> AsyncGenerator[Item, None]:
+        raise NotImplementedError("You can only use 'asearch' on an asynchronous adapter")
 
     def _from_dict(self, data: dict) -> List[Item]:
         if data.get('error'):
@@ -108,3 +113,25 @@ class AiohttpAdapter(BaseAdapter):
             "GET", "/", params=self._payload_maker(*args, **kwargs)
         )
         return self._from_dict(r)
+
+    async def asearch(self, *args, **kwargs) -> AsyncGenerator[Item, None]:
+        limit = kwargs.get("limit", 100)
+
+        if "limit" in kwargs:
+            del kwargs["limit"]
+
+        while True:
+            page = await self.search(*args, **kwargs)
+
+            for result in page:
+                yield result
+
+            kwargs["start"] = kwargs.get("start", 1) + kwargs.get("num", 10)
+
+            if kwargs["start"] + kwargs.get("num", 10) > limit:
+                kwargs["num"] = limit - kwargs["start"] + 1 # both ends of the range are inclusive
+
+            if kwargs.get("num", 10) <= 0:
+                return
+
+

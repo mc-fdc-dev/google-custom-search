@@ -1,6 +1,6 @@
 # google-custom-seaerch - search
 
-from typing import List
+from typing import List, AsyncGenerator
 
 from .types import Item
 from .adapter import BaseAdapter
@@ -32,3 +32,7 @@ class CustomSearch:
             ApiNotEnabled: api is not invalid
         """
         return self.adapter.search(*args, **kwargs)
+
+    async def asearch(self, *args, **kwargs) -> AsyncGenerator[Item, None]:
+        async for item in self.adapter.asearch(*args, **kwargs):
+            yield item
