@@ -89,8 +89,8 @@ class RequestsAdapter(BaseAdapter):
 class AiohttpAdapter(BaseAdapter):
     "This class is aiohttpadapter for async mode."
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, apikey, engine_id, *args, **kwargs):
+        super().__init__(apikey, engine_id)
         if not async_mode:
             raise AsyncError(
                 "This adapter use aiohttp, so please install aiohttp")
