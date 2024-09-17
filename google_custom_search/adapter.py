@@ -52,9 +52,10 @@ class BaseAdapter(metaclass=ABCMeta):
     def _payload_maker(
         self, query: str, *,
         safe: bool = False,
-        filter_: bool = False
+        filter_: bool = False,
+        **kwargs
     ) -> dict:
-        payload = {
+        payload = kwargs | {
             "key": self.apikey,
             "cx": self.engine_id,
             "q": query
