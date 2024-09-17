@@ -107,4 +107,4 @@ class AiohttpAdapter(BaseAdapter):
         r = await self.request(
             "GET", "/", params=self._payload_maker(*args, **kwargs)
         )
-        return self._from_dict(await r.json())
+        return self._from_dict(r)
