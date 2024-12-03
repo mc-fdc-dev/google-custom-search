@@ -15,6 +15,8 @@ else:
 from .errors import AsyncError, ApiNotEnabled
 from .types import Item
 
+from typing import AsyncGenerator
+
 
 class BaseAdapter(metaclass=ABCMeta):
     """This is the base class for adapters.
@@ -42,6 +44,9 @@ class BaseAdapter(metaclass=ABCMeta):
     def search(self, *args, **kwargs) -> List[Item]:
         ...
 
+    async def asearch(self, *_args, **_kwargs) -> AsyncGenerator[Item, None]:
+        raise NotImplementedError("You can only use 'asearch' on an asynchronous adapter")
+
     def _from_dict(self, data: dict) -> List[Item]:
         if data.get('error'):
             raise ApiNotEnabled(
@@ -52,9 +57,10 @@ class BaseAdapter(metaclass=ABCMeta):
     def _payload_maker(
         self, query: str, *,
         safe: bool = False,
-        filter_: bool = False
+        filter_: bool = False,
+        **kwargs
     ) -> dict:
-        payload = {
+        payload = kwargs | {
             "key": self.apikey,
             "cx": self.engine_id,
             "q": query
@@ -89,8 +95,8 @@ class RequestsAdapter(BaseAdapter):
 class AiohttpAdapter(BaseAdapter):
     "This class is aiohttpadapter for async mode."
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, apikey, engine_id, *args, **kwargs):
+        super().__init__(apikey, engine_id)
         if not async_mode:
             raise AsyncError(
                 "This adapter use aiohttp, so please install aiohttp")
@@ -106,4 +112,26 @@ class AiohttpAdapter(BaseAdapter):
         r = await self.request(
             "GET", "/", params=self._payload_maker(*args, **kwargs)
         )
-        return self._from_dict(await r.json())
+        return self._from_dict(r)
+
+    async def asearch(self, *args, **kwargs) -> AsyncGenerator[Item, None]:
+        limit = kwargs.get("limit", 100)
+
+        if "limit" in kwargs:
+            del kwargs["limit"]
+
+        while True:
+            page = await self.search(*args, **kwargs)
+
+            for result in page:
+                yield result
+
+            kwargs["start"] = kwargs.get("start", 1) + kwargs.get("num", 10)
+
+            if kwargs["start"] + kwargs.get("num", 10) > limit:
+                kwargs["num"] = limit - kwargs["start"] + 1 # both ends of the range are inclusive
+
+            if kwargs.get("num", 10) <= 0:
+                return
+
+
